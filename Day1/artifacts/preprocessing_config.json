@@ -1,0 +1,66 @@
+{
+  "seed": 42,
+  "label_names": [
+    "Negative (0)",
+    "Positive (1)"
+  ],
+  "label_mapping": {
+    "0": "Negative",
+    "1": "Positive"
+  },
+  "negation_words": [
+    "بلا",
+    "حاشا",
+    "دون",
+    "غير",
+    "لا",
+    "لم",
+    "لن",
+    "ليس",
+    "ما"
+  ],
+  "intensifier_words": [
+    "جدا",
+    "جدًا",
+    "كثيرا",
+    "كثيرًا"
+  ],
+  "stopwords_source": "nltk Arabic stopwords",
+  "tfidf_config": {
+    "max_features": 10000,
+    "min_df": 2,
+    "sublinear_tf": true
+  },
+  "model_config": {
+    "type": "LogisticRegression",
+    "C": 1.0,
+    "max_iter": 1000,
+    "random_state": 42
+  },
+  "preprocessing_steps": [
+    "1. normalize_text() — Tashkeel removal, Alef unification, punctuation cleanup",
+    "2. word_tokenize() — NLTK Arabic tokenizer",
+    "3. Filter digits/Latin — Remove non-Arabic tokens",
+    "4. unify_alef() — Alef/Hamza/ta-marbuta normalization",
+    "5. Protect negations — Preserve sentiment-critical tokens",
+    "6. Lemmatize — qalsadi dictionary-based Arabic lemmatization",
+    "7. Remove stopwords — NLTK Arabic stopwords (with negation protection)",
+    "8. TfidfVectorizer.transform — Transform using fitted vocabulary",
+    "9. LogisticRegression.predict — Binary classification"
+  ],
+  "dataset": {
+    "name": "Arabic Sentiment Reviews (Kaggle)",
+    "total_samples": 20000,
+    "train_samples": 14000,
+    "val_samples": 3000,
+    "test_samples": 3000,
+    "splits_stratified": true
+  },
+  "test_metrics": {
+    "accuracy": 0.8623,
+    "macro_f1": 0.8623,
+    "roc_auc": 0.9417
+  },
+  "artifacts_version": "1.0.0",
+  "created_by": "Sprint4_Day1_Serialization"
+}
