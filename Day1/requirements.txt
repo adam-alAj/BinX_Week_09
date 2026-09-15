@@ -13,8 +13,9 @@ scikit-learn==1.9.1
 # Arabic lemmatizer (required for preprocessing)
 qalsadi==0.2.4
 #
-# Deployment packages (Day 2+ — install when needed)
-fastapi
-pydantic
+# Deployment packages (Day 2+)
+fastapi==0.141.1
+httpx==0.28.1
+pydantic==2.13.5
 streamlit
-uvicorn
+uvicorn==0.53.0
