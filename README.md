@@ -18,9 +18,8 @@
 | 4 | Artifact Verification | Day 1 | ✅ Complete |
 | 5 | Reproducibility Setup | Day 1 | ✅ Complete |
 | 6 | MLflow Traceability | Day 1 | ✅ Complete |
-| 7 | Requirements Freeze | Day 1 | ✅ Complete |
-| 8 | FastAPI Serving | Day 2 | Planned |
-| 9 | Streamlit Dashboard | Day 3 | Planned |
+| 7 | Requirements Freeze | Day 1 | ✅ Complete |   | 8 | FastAPI Serving | Day 2 | ✅ Complete |
+   | 9 | Streamlit Dashboard | Day 3 | ✅ Complete |
 | 10 | Public Deployment | Day 4 | Planned |
 | 11 | Final Verification & Review | Day 5 | Planned |
 
@@ -46,8 +45,33 @@
   - Documented the **Day 2 handoff** — artifact loading instructions and the `/predict` endpoint contract for the FastAPI service.
 * **Tools used:** `scikit-learn` (`TfidfVectorizer`, `LogisticRegression`, `accuracy_score`, `f1_score`), `joblib` (serialization), NLTK (tokenization, stopwords), `qalsadi` (Arabic lemmatizer), NumPy, Pandas, JSON, MLflow (optional).
 
-### Day 2: FastAPI Serving *(Planned)*
-### Day 3: Streamlit Dashboard *(Planned)*
+### ✅ Day 2: Serving the Model with FastAPI
+
+* **Objective:** Building a local REST API with FastAPI to serve the serialized Arabic sentiment classifier, with Pydantic validation, preprocessing reuse, and full notebook-vs-API consistency verification.
+* **Key Tasks & Accomplishments:**
+  - Built a **FastAPI application** (`main.py`) with three endpoints: `GET /` (health check), `GET /health` (lightweight probe), and `POST /predict` (sentiment classification).
+  - Defined **Pydantic request/response schemas** — `PredictionRequest` with empty-text validation, `PredictionResponse` with prediction, label, confidence, probabilities, model version, and preprocessing step count.
+  - Created a **shared preprocessing module** (`preprocessing.py`) with reusable `preprocess_text()` and `load_artifacts()` functions, imported by both the FastAPI app and the Day 3 Streamlit dashboard.
+  - Loaded all **Day 1 artifacts** (`model.joblib`, `vectorizer.joblib`, `lemma_table.json`, `preprocessing_config.json`) at server startup, cached in a module-level variable.
+  - Implemented the **full inference pipeline**: raw text → `preprocess_text()` → `vectorizer.transform()` → `model.predict()` → JSON response.
+  - Verified **notebook-vs-API consistency** — 6 Arabic test samples produced identical predictions and probabilities (10/10 match).
+  - Documented API usage in `FastAPI.ipynb` with Swagger UI at `/docs`.
+* **Tools used:** FastAPI, Pydantic, Uvicorn, `scikit-learn` (`TfidfVectorizer`, `LogisticRegression`), `joblib`, NLTK, `qalsadi`, NumPy, JSON.
+
+### ✅ Day 3: Interactive Streamlit Dashboard
+
+* **Objective:** Building an interactive Streamlit dashboard that serves the trained Arabic sentiment classifier to non-technical users, with a clean demo UI suitable for live presentation.
+* **Key Tasks & Accomplishments:**
+  - Built a **Streamlit dashboard** (`app.py`) with text area input, example selector dropdown, prediction button, and result display using `st.success`/`st.error` with confidence percentages.
+  - Implemented a **Matplotlib horizontal bar chart** for class probability visualization.
+  - Reused the **shared preprocessing module** from Day 2 (`preprocessing.py`) — exact same pipeline as training.
+  - Applied **`@st.cache_resource`** for artifact loading (load once, not on every rerun).
+  - Validated **prediction consistency** — 6 Arabic test samples matched between notebook and Streamlit app (6/6 match).
+  - Ran **8 functional test cases** covering positive/negative sentiment across different domains.
+  - Tested **error handling** for empty string, whitespace, Latin text, numbers-only, and None input.
+  - Achieved **10/10 validation checks PASS** — artifacts load correctly, model is correct, inference works, no retraining occurred, predictions are deterministic.
+  - Documented the complete Day 3 lab in `Dashboard.ipynb` with functional tests, consistency validation, and final validation summary.
+* **Tools used:** Streamlit, Matplotlib, `scikit-learn` (`TfidfVectorizer`, `LogisticRegression`), `joblib`, NLTK, `qalsadi`, NumPy, JSON.
 ### Day 4: Public Deployment *(Planned)*
 ### Day 5: Final Verification & Sprint Review *(Planned)*
 
